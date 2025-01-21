@@ -23,7 +23,7 @@ from linebot.v3.webhooks import (
 )
 
 def scrapy_text():
-    re = requests.get('https://www.duranno.tw/livinglife/index.php/daily')
+    re = requests.get('https://www.duranno.tw/livinglife/index.php/daily_p')
     soup = BeautifulSoup(re.text,"html.parser")
 
     today = datetime.now()
@@ -57,8 +57,7 @@ def quit_time():
 
 
 app = Flask(__name__)
-scheduler = BackgroundScheduler()
-scheduler.start
+
 configuration = Configuration(access_token=os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 
