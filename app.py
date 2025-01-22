@@ -1,5 +1,7 @@
 from flask import Flask, request, abort
 from apscheduler.schedulers.background import BackgroundScheduler
+from googleapiclient.discovery import build
+
 import os
 import requests
 from datetime import datetime
@@ -22,6 +24,24 @@ from linebot.v3.webhooks import (
     TextMessageContent
 )
 
+def get_youtubeId():
+    youtube = build('youtube', 'v3', developerKey=os.environ['DEVELOPER_KEY'])
+    today = datetime.now()
+    request = youtube.search().list(
+        part="snippet",   
+        q=f"活潑的生命{today.year}{today.month}{today.day}"
+    )
+    response = request.execute()
+    today = datetime.now()
+
+    for i in response['items']:
+        id = i['id']['videoId']
+        title = i['snippet']['title']
+        if f'{today.year}.{today.month:2d}.{today.day:2d}' in title:
+            return f'https://www.youtube.com/watch?v={id}'
+    return ''
+
+
 def scrapy_text():
     re = requests.get('https://www.duranno.tw/livinglife/index.php/daily_p')
     soup = BeautifulSoup(re.text,"html.parser")
@@ -33,11 +53,15 @@ def scrapy_text():
     verse = soup.find("div", {"class": "range"}).get_text()
     verse = verse.replace('\n','').replace(' ','')
 
-    message = f'''弟兄姊妹平安，你今天QT了嗎?
-    讓我們每天用《活潑的聖命》一起QT
-    《{today.year}年{today.month}月{today.day}日》
-    【QT主題:{topic}】
-    【QT經文進度:{verse}】'''
+    message = (
+        fr'''弟兄姊妹平安，你今天QT了嗎?'''
+        fr'''讓我們每天用《活潑的聖命》一起QT'''
+        fr'''《{today.year}年{today.month}月{today.day}日》'''
+        fr'''【QT主題:{topic}】'''
+        fr'''【QT經文進度:{verse}】'''
+        fr'''【推薦影片:{get_youtubeId()}】'''
+        )
+    
     return message
 
 def quit_time():
