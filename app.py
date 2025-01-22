@@ -1,7 +1,7 @@
 from flask import Flask, request, abort
 from apscheduler.schedulers.background import BackgroundScheduler
 from googleapiclient.discovery import build
-
+import sys
 import os
 import requests
 from datetime import datetime
@@ -31,6 +31,8 @@ def get_youtubeId(date, title):
         q=f"[活潑的生命]{date} {title}",
         maxResults=50
     )
+    app.logger.info(f"[活潑的生命]{date} {title}")
+
     response = request.execute()
 
     for i in response['items']:
@@ -43,7 +45,7 @@ def get_youtubeId(date, title):
 
 
 def scrapy_text():
-    re = requests.get('https://www.duranno.tw/livinglife/index.php/daily_p')
+    re = requests.get('https://www.duranno.tw/livinglife/index.php/daily')
     soup = BeautifulSoup(re.text,"html.parser")
 
     today = datetime.now()
