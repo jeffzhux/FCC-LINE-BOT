@@ -4,7 +4,7 @@ today = datetime.now()
 
 
 def get_youtubeId(date, title):
-    DEVELOPER_KEY='AIzaSyBKrXe6N_46-7XcLXKFzwQAK9-3HVSKx8c'
+    DEVELOPER_KEY=''
     youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
     request = youtube.search().list(
         part="snippet",   
