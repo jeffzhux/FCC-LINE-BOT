@@ -1,6 +1,5 @@
 from googleapiclient.discovery import build
 from datetime import datetime
-DEVELOPER_KEY = 'AIzaSyBKrXe6N_46-7XcLXKFzwQAK9-3HVSKx8c'
 
 youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
 today = datetime.now()
