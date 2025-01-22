@@ -28,7 +28,8 @@ def get_youtubeId(date, title):
     youtube = build('youtube', 'v3', developerKey=os.environ['DEVELOPER_KEY'])
     request = youtube.search().list(
         part="snippet",   
-        q=f"[活潑的生命]{date} {title}"
+        q=f"[活潑的生命]{date} {title}",
+        maxResults=50
     )
     response = request.execute()
 
