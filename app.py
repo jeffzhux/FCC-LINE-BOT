@@ -25,7 +25,8 @@ from linebot.v3.webhooks import (
 )
 
 def get_youtubeId(date, title):
-    youtube = build('youtube', 'v3', developerKey=os.environ['DEVELOPER_KEY'])
+    DEVELOPER_KEY=''
+    youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
     request = youtube.search().list(
         part="snippet",   
         q=f"[活潑的生命]{date} {title}",
@@ -36,6 +37,7 @@ def get_youtubeId(date, title):
     for i in response['items']:
         id = i['id']['videoId'] if 'videoId' in i['id'] else ''
         title = i['snippet']['title'] if 'title' in i['snippet'] else ''
+
         if date in title:
             return f'https://www.youtube.com/watch?v={id}'
     return ''
@@ -53,6 +55,7 @@ def scrapy_text():
     verse = verse.replace('\n','').replace(' ','')
 
     url = get_youtubeId(f'{today.year}{today.month:02d}{today.day:02d}', topic)
+    print(f'{today.year}{today.month:02d}{today.day:02d}', topic)
     message = (
         f'''弟兄姊妹平安，你今天QT了嗎?\n'''
         f'''讓我們每天用《活潑的聖命》一起QT\n'''
@@ -107,6 +110,8 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+    if '聖經' != event.message.text:
+        return
     message = scrapy_text()
 
     with ApiClient(configuration) as api_client:
