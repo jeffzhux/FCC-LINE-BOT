@@ -25,8 +25,7 @@ from linebot.v3.webhooks import (
 )
 
 def get_youtubeId(date, title):
-    DEVELOPER_KEY=''
-    youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
+    youtube = build('youtube', 'v3', developerKey=os.environ['DEVELOPER_KEY'])
     request = youtube.search().list(
         part="snippet",   
         q=f"[活潑的生命]{date} {title}",
