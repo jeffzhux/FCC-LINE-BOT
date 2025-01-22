@@ -26,7 +26,6 @@ from linebot.v3.webhooks import (
 
 def get_youtubeId(date, title):
     youtube = build('youtube', 'v3', developerKey=os.environ['DEVELOPER_KEY'])
-    today = datetime.now()
     request = youtube.search().list(
         part="snippet",   
         q=f"[活潑的生命]{date} {title}"
@@ -52,13 +51,14 @@ def scrapy_text():
     verse = soup.find("div", {"class": "range"}).get_text()
     verse = verse.replace('\n','').replace(' ','')
 
+    url = get_youtubeId(f'{today.year}{today.month:02d}{today.day:02d}', topic)
     message = (
         f'''弟兄姊妹平安，你今天QT了嗎?\n'''
         f'''讓我們每天用《活潑的聖命》一起QT\n'''
         f'''《{today.year}年{today.month}月{today.day}日》\n'''
         f'''【QT主題:{topic}】\n'''
         f'''【QT經文進度:{verse}】\n'''
-        f'''【推薦影片:{get_youtubeId(f'{today.year}{today.month:02d}{today.day:02d}', topic)}】'''
+        f'''【推薦影片:】{url}'''
         )
     
     return message
