@@ -29,7 +29,7 @@ def get_youtubeId():
     today = datetime.now()
     request = youtube.search().list(
         part="snippet",   
-        q=f"活潑的生命{today.year}{today.month}{today.day}"
+        q=f"活潑的生命{today.year}{today.month:2d}{today.day:2d}"
     )
     response = request.execute()
     today = datetime.now()
@@ -37,7 +37,7 @@ def get_youtubeId():
     for i in response['items']:
         id = i['id']['videoId']
         title = i['snippet']['title']
-        if f'{today.year}.{today.month:2d}.{today.day:2d}' in title:
+        if f'{today.year}{today.month:2d}{today.day:2d}' in title:
             return f'https://www.youtube.com/watch?v={id}'
     return ''
 
@@ -54,11 +54,11 @@ def scrapy_text():
     verse = verse.replace('\n','').replace(' ','')
 
     message = (
-        fr'''弟兄姊妹平安，你今天QT了嗎?'''
-        fr'''讓我們每天用《活潑的聖命》一起QT'''
-        fr'''《{today.year}年{today.month}月{today.day}日》'''
-        fr'''【QT主題:{topic}】'''
-        fr'''【QT經文進度:{verse}】'''
+        fr'''弟兄姊妹平安，你今天QT了嗎?\n'''
+        fr'''讓我們每天用《活潑的聖命》一起QT\n'''
+        fr'''《{today.year}年{today.month}月{today.day}日》\n'''
+        fr'''【QT主題:{topic}】\n'''
+        fr'''【QT經文進度:{verse}】\n'''
         fr'''【推薦影片:{get_youtubeId()}】'''
         )
     
