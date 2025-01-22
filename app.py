@@ -110,6 +110,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+    print(event.message.text)
     if '聖經' != event.message.text:
         return
     message = scrapy_text()
